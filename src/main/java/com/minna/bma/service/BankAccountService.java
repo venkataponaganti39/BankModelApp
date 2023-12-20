@@ -1,0 +1,63 @@
+package com.minna.bma.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.minna.bma.entity.BankAccount;
+import com.minna.bma.entity.Transaction;
+import com.minna.bma.repository.BankAccountRepository;
+import com.minna.bma.repository.TransactionRepository;
+
+@Service
+public class BankAccountService {
+
+	private final BankAccountRepository bankAccountRepository;
+	private final TransactionRepository transactionRepository;
+
+	@Autowired
+	public BankAccountService(BankAccountRepository bankAccountRepository,
+			TransactionRepository transactionRepository) {
+		this.bankAccountRepository = bankAccountRepository;
+		this.transactionRepository = transactionRepository;
+	}
+
+	public Transaction createTransaction(Long id, Transaction transaction) {
+		transaction.setBankAccount(new BankAccount(id));
+		return transactionRepository.save(transaction);
+	}
+
+	public BankAccount createBankAccount(BankAccount bankAccount) {
+		return bankAccountRepository.save(bankAccount);
+	}
+
+	public BankAccount retrieveBankAccountById(Long id) {
+		BankAccount bankAccount = bankAccountRepository.findById(id).orElse(null);
+		return bankAccount;
+	}
+
+	public List<Transaction> retrieveAllTransactionsByBankId(Long id) {
+		List<Transaction> transactionList = transactionRepository.findByBankAccountId(id);
+		return transactionList;
+	}
+
+	public Transaction retrieveTransactoinById(Long id) {
+		Transaction transaction = transactionRepository.findById(id).orElse(null);
+		return transaction;
+	}
+	
+	
+
+	public List<BankAccount> retrieveAllBankAccounts() {
+		return bankAccountRepository.findAll();
+	}
+
+	public BankAccount updateBankAccount(Long id, BankAccount updatedBankAccount) throws Exception {
+		BankAccount bankAccount = bankAccountRepository.findById(id)
+				.orElseThrow(() -> new Exception("Bank account not found"));
+		bankAccount.setIdentifier(updatedBankAccount.getIdentifier());
+		bankAccount.setUserIdentifier(updatedBankAccount.getUserIdentifier());
+		return bankAccountRepository.save(bankAccount);
+	}
+}
