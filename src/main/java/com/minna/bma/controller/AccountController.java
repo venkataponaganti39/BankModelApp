@@ -30,44 +30,45 @@ public class AccountController {
 	public AccountController(BankAccountService bankAccountService) {
 		this.bankAccountService = bankAccountService;
 	}
-	
+
 	@PostMapping("/bank-accounts")
 	public ResponseEntity<BankAccount> createBankAccount(@RequestBody BankAccount bankAccount) {
 		return new ResponseEntity<>(bankAccountService.createBankAccount(bankAccount), HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping("/bank-accounts")
 	public ResponseEntity<List<BankAccount>> retrieveAllBankAccounts() {
 		List<BankAccount> bankAccounts = bankAccountService.retrieveAllBankAccounts();
 		return new ResponseEntity<>(bankAccounts, HttpStatus.OK);
 	}
 
-	@GetMapping("/bank-accounts/{id}")
-	public ResponseEntity<BankAccount> retrieveBankAccountById(@PathVariable Long id) {
-		BankAccount bankAccount = bankAccountService.retrieveBankAccountById(id);
+	@GetMapping("/bank-accounts/{UUID}")
+	public ResponseEntity<BankAccount> retrieveBankAccountById(@PathVariable Long UUID) {
+		BankAccount bankAccount = bankAccountService.retrieveBankAccountById(UUID);
 		return new ResponseEntity<>(bankAccount, HttpStatus.OK);
 	}
-	
-	@PutMapping("/bank-accounts/{id}")
-	public ResponseEntity<BankAccount> updateBankAccount(@PathVariable Long id, @RequestBody BankAccount updteBankAccount) throws Exception {
-		return new ResponseEntity<>(bankAccountService.updateBankAccount(id, updteBankAccount), HttpStatus.OK);
+
+	@PutMapping("/bank-accounts/{UUID}")
+	public ResponseEntity<BankAccount> updateBankAccount(@PathVariable Long UUID,
+			@RequestBody BankAccount updteBankAccount) throws Exception {
+		return new ResponseEntity<>(bankAccountService.updateBankAccount(UUID, updteBankAccount), HttpStatus.OK);
 	}
-	
-	@GetMapping("/bank-accounts/{id}/transactions")
-	public ResponseEntity<List<Transaction>> retrieveAllTransactionsByBankId(@PathVariable Long id) {
-		List<Transaction> transactionList = bankAccountService.retrieveAllTransactionsByBankId(id);
+
+	@GetMapping("/bank-accounts/{UUID}/transactions")
+	public ResponseEntity<List<Transaction>> retrieveAllTransactionsByBankId(@PathVariable Long UUID) {
+		List<Transaction> transactionList = bankAccountService.retrieveAllTransactionsByBankId(UUID);
 		return new ResponseEntity<>(transactionList, HttpStatus.OK);
 	}
-	
-	@PostMapping("/bank-accounts/{id}/transactions")
-	public ResponseEntity<Transaction> createTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
+
+	@PostMapping("/bank-accounts/{UUID}/transactions")
+	public ResponseEntity<Transaction> createTransaction(@PathVariable Long UUID, @RequestBody Transaction transaction) {
 		transaction.setDate(LocalDateTime.now());
-		return new ResponseEntity<>(bankAccountService.createTransaction(id, transaction), HttpStatus.CREATED);
+		return new ResponseEntity<>(bankAccountService.createTransaction(UUID, transaction), HttpStatus.CREATED);
 	}
-	
-	@GetMapping("/transactions/{id}")
-	public ResponseEntity<Transaction> retrieveTransactoinById(@PathVariable Long id) {
-		Transaction transaction = bankAccountService.retrieveTransactoinById(id);
+
+	@GetMapping("/transactions/{UUID}")
+	public ResponseEntity<Transaction> retrieveTransactionById(@PathVariable Long UUID) {
+		Transaction transaction = bankAccountService.retrieveTransactionById(UUID);
 		return new ResponseEntity<>(transaction, HttpStatus.OK);
 	}
 
@@ -89,21 +90,19 @@ public class AccountController {
 		return accountList;
 	}
 
-	@GetMapping("/balance/{id}")
-	public Double calculateBalance(@PathVariable Long id) {
+	@GetMapping("/balance/{UUID}")
+	public Double calculateBalance(@PathVariable Long UUID) {
 		Double balance = 0.0;
-		List<Transaction> transactionList = bankAccountService.retrieveAllTransactionsByBankId(id);
+		List<Transaction> transactionList = bankAccountService.retrieveAllTransactionsByBankId(UUID);
 		for (Transaction transaction : transactionList) {
 			balance += transaction.getAmount();
 		}
 		return balance;
 	}
 
-
-	@GetMapping("/interval/{id}/{text}")
-	public List<DurationVO> getTimeIntervalBetweenTransactions(@PathVariable Long id,
-			@PathVariable String text) {
-		List<Transaction> transactions = bankAccountService.retrieveAllTransactionsByBankId(id);
+	@GetMapping("/interval/{UUID}/{text}")
+	public List<DurationVO> getTimeIntervalBetweenTransactions(@PathVariable Long UUID, @PathVariable String text) {
+		List<Transaction> transactions = bankAccountService.retrieveAllTransactionsByBankId(UUID);
 		List<Transaction> transactionList = new ArrayList<>();
 		LocalDateTime firstTransactionTime = null;
 		LocalDateTime secondTransactionTime = null;
@@ -119,7 +118,7 @@ public class AccountController {
 			firstTransactionTime = transactions.get(i).getDate();
 			secondTransactionTime = transactions.get(i + 1).getDate();
 			durationVO.setDuration(Duration.between(firstTransactionTime, secondTransactionTime));
-			durationVO.setBankAccId(id);
+			durationVO.setBankAccId(UUID);
 			durationVO.setText(text);
 			durationVO.setDate(secondTransactionTime);
 			durationList.add(durationVO);

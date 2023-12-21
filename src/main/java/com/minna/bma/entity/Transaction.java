@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 public class Transaction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long UUID;
 	private String identifier;
 	private LocalDateTime date;
 	private String text;
@@ -26,21 +26,25 @@ public class Transaction {
 	private String receiptNumber;
 	private double amount;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "bank_account_id", referencedColumnName = "id")
+	@JoinColumn(name = "bank_account_id", referencedColumnName = "UUID")
 	@JsonIgnore
 	private BankAccount bankAccount;
 
 	public Transaction() {
 	}
 
-	// Getters and Setters
-
-	public Long getId() {
-		return id;
+	/**
+	 * @return the uUID
+	 */
+	public Long getUUID() {
+		return UUID;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	/**
+	 * @param uUID the uUID to set
+	 */
+	public void setUUID(Long uUID) {
+		UUID = uUID;
 	}
 
 	/**

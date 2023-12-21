@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.minna.bma.entity.BankAccount;
-import com.minna.bma.entity.Transaction;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -63,7 +62,7 @@ public class BmaApplicationTests {
 	@Test
 	public void testRetrieveBankAccountById() throws Exception {
 		mockMvc.perform(
-				MockMvcRequestBuilders.get("/api/bank-accounts/{id}", 1).contentType(MediaType.APPLICATION_JSON))
+				MockMvcRequestBuilders.get("/api/bank-accounts/{UUID}", 1).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
@@ -76,37 +75,15 @@ public class BmaApplicationTests {
 		HttpEntity<BankAccount> request = new HttpEntity<>(account, headers);
 		ResponseEntity<BankAccount> response = restTemplate.exchange(createURLWithPort("/api/bank-accounts"),
 				HttpMethod.POST, request, BankAccount.class);
-		ResponseEntity<BankAccount> res = restTemplate.exchange(createURLWithPort("/api/bank-accounts/"+response.getBody().getId()),
-				HttpMethod.PUT, request, BankAccount.class);
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/bank-accounts/"+response.getBody().getId()).contentType(MediaType.APPLICATION_JSON))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+		ResponseEntity<BankAccount> res = restTemplate.exchange(
+				createURLWithPort("/api/bank-accounts/" + response.getBody().getUUID()), HttpMethod.PUT, request,
+				BankAccount.class);
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/bank-accounts/" + response.getBody().getUUID())
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk());
 		assertEquals(HttpStatus.OK, res.getStatusCode());
 		assertEquals("identifier1", res.getBody().getIdentifier());
 		assertEquals("userIdentifier1", res.getBody().getUserIdentifier());
 	}
-	
-	/*
-	 * @Test public void tetCreateTransaction() { BankAccount account = new
-	 * BankAccount(); account.setIdentifier("identifier");
-	 * account.setUserIdentifier("userIdentifier");
-	 * 
-	 * HttpEntity<BankAccount> request = new HttpEntity<>(account, headers);
-	 * ResponseEntity<BankAccount> response =
-	 * restTemplate.exchange(createURLWithPort("/api/bank-accounts"),
-	 * HttpMethod.POST, request, BankAccount.class);
-	 * 
-	 * Transaction transaction = new Transaction(); transaction.setAmount(-100.0);
-	 * transaction.setReceiptNumber("1234"); transaction.setText("Gym");
-	 * 
-	 * HttpEntity<BankAccount> request = new HttpEntity<>(account, headers);
-	 * ResponseEntity<BankAccount> response =
-	 * restTemplate.exchange(createURLWithPort("/api/bank-accounts"),
-	 * HttpMethod.POST, request, BankAccount.class);
-	 * 
-	 * assertEquals(HttpStatus.CREATED, response.getStatusCode());
-	 * assertEquals("identifier", response.getBody().getIdentifier());
-	 * assertEquals("userIdentifier", response.getBody().getUserIdentifier()); }
-	 */
 
 	private String createURLWithPort(String uri) {
 		return "http://localhost:8080" + uri;

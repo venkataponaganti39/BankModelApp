@@ -9,27 +9,26 @@ import jakarta.persistence.Id;
 public class CreditCard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long UUID;
 	private String identifier;
 	private String creditCardNumber;
 	private String userIdentifier;
-	// Constructors, getters, and setters
 
 	public CreditCard() {
 	}
 
 	/**
-	 * @return the id
+	 * @return the uUID
 	 */
-	public Long getId() {
-		return id;
+	public Long getUUID() {
+		return UUID;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param uUID the uUID to set
 	 */
-	public void setId(Long id) {
-		this.id = id;
+	public void setUUID(Long uUID) {
+		UUID = uUID;
 	}
 
 	/**

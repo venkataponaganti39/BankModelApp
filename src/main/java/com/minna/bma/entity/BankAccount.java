@@ -18,34 +18,33 @@ import jakarta.persistence.Table;
 public class BankAccount {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long UUID;
 	private String identifier;
 	private String userIdentifier;
-	// Define the foreign key relationship with Transaction table
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bankAccount", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Transaction> transactions;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "bankAccount", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Transaction> transactions;
 
 	public BankAccount() {
 	}
 
-	public BankAccount(Long id) {
+	public BankAccount(Long uUID) {
 		super();
-		this.id = id;
+		UUID = uUID;
 	}
 
 	/**
-	 * @return the id
+	 * @return the uUID
 	 */
-	public Long getId() {
-		return id;
+	public Long getUUID() {
+		return UUID;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param uUID the uUID to set
 	 */
-	public void setId(Long id) {
-		this.id = id;
+	public void setUUID(Long uUID) {
+		UUID = uUID;
 	}
 
 	/**
@@ -89,7 +88,5 @@ public class BankAccount {
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;
 	}
-	
-	
 
 }

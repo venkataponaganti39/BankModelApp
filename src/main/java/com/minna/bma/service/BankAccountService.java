@@ -23,8 +23,8 @@ public class BankAccountService {
 		this.transactionRepository = transactionRepository;
 	}
 
-	public Transaction createTransaction(Long id, Transaction transaction) {
-		transaction.setBankAccount(new BankAccount(id));
+	public Transaction createTransaction(Long UUID, Transaction transaction) {
+		transaction.setBankAccount(new BankAccount(UUID));
 		return transactionRepository.save(transaction);
 	}
 
@@ -32,29 +32,27 @@ public class BankAccountService {
 		return bankAccountRepository.save(bankAccount);
 	}
 
-	public BankAccount retrieveBankAccountById(Long id) {
-		BankAccount bankAccount = bankAccountRepository.findById(id).orElse(null);
+	public BankAccount retrieveBankAccountById(Long UUID) {
+		BankAccount bankAccount = bankAccountRepository.findById(UUID).orElse(null);
 		return bankAccount;
 	}
 
-	public List<Transaction> retrieveAllTransactionsByBankId(Long id) {
-		List<Transaction> transactionList = transactionRepository.findByBankAccountId(id);
+	public List<Transaction> retrieveAllTransactionsByBankId(Long UUID) {
+		List<Transaction> transactionList = transactionRepository.findByBankAccountId(UUID);
 		return transactionList;
 	}
 
-	public Transaction retrieveTransactoinById(Long id) {
-		Transaction transaction = transactionRepository.findById(id).orElse(null);
+	public Transaction retrieveTransactionById(Long UUID) {
+		Transaction transaction = transactionRepository.findById(UUID).orElse(null);
 		return transaction;
 	}
-	
-	
 
 	public List<BankAccount> retrieveAllBankAccounts() {
 		return bankAccountRepository.findAll();
 	}
 
-	public BankAccount updateBankAccount(Long id, BankAccount updatedBankAccount) throws Exception {
-		BankAccount bankAccount = bankAccountRepository.findById(id)
+	public BankAccount updateBankAccount(Long UUID, BankAccount updatedBankAccount) throws Exception {
+		BankAccount bankAccount = bankAccountRepository.findById(UUID)
 				.orElseThrow(() -> new Exception("Bank account not found"));
 		bankAccount.setIdentifier(updatedBankAccount.getIdentifier());
 		bankAccount.setUserIdentifier(updatedBankAccount.getUserIdentifier());
