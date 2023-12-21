@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +62,8 @@ public class AccountController {
 	}
 
 	@PostMapping("/bank-accounts/{UUID}/transactions")
-	public ResponseEntity<Transaction> createTransaction(@PathVariable Long UUID, @RequestBody Transaction transaction) {
+	public ResponseEntity<Transaction> createTransaction(@PathVariable Long UUID,
+			@RequestBody Transaction transaction) {
 		transaction.setDate(LocalDateTime.now());
 		return new ResponseEntity<>(bankAccountService.createTransaction(UUID, transaction), HttpStatus.CREATED);
 	}
@@ -103,16 +105,14 @@ public class AccountController {
 	@GetMapping("/interval/{UUID}/{text}")
 	public List<DurationVO> getTimeIntervalBetweenTransactions(@PathVariable Long UUID, @PathVariable String text) {
 		List<Transaction> transactions = bankAccountService.retrieveAllTransactionsByBankId(UUID);
-		List<Transaction> transactionList = new ArrayList<>();
 		LocalDateTime firstTransactionTime = null;
 		LocalDateTime secondTransactionTime = null;
 		List<DurationVO> durationList = new ArrayList<>();
 		DurationVO durationVO;
-		for (Transaction transaction : transactions) {
-			if (transaction.getText().trim().equalsIgnoreCase(text.trim())) {
-				transactionList.add(transaction);
-			}
-		}
+
+		List<Transaction> transactionList = transactions.stream()
+				.filter(t -> t.getText().trim().equalsIgnoreCase(text.trim())).collect(Collectors.toList());
+
 		for (int i = 0; i < (transactionList.size()) - 1; i++) {
 			durationVO = new DurationVO();
 			firstTransactionTime = transactions.get(i).getDate();
