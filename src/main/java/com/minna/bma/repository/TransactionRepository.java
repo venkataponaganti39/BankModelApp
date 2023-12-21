@@ -9,10 +9,10 @@ import com.minna.bma.entity.Transaction;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-	List<Transaction> findByBankAccountId(Long bankAccountId);
+	List<Transaction> findByBankAccountUUID(Long bankAccountId);
 
 	List<Transaction> findByIdentifier(String identifier);
 
-	Optional<Transaction> findById(Long UUID);
+	Optional<Transaction> findByUUID(Long UUID);
 
 }

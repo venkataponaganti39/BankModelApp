@@ -38,7 +38,7 @@ public class BankAccountService {
 	}
 
 	public List<Transaction> retrieveAllTransactionsByBankId(Long UUID) {
-		List<Transaction> transactionList = transactionRepository.findByBankAccountId(UUID);
+		List<Transaction> transactionList = transactionRepository.findByBankAccountUUID(UUID);
 		return transactionList;
 	}
 
