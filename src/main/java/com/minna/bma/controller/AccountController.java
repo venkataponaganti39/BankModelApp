@@ -32,8 +32,8 @@ public class AccountController {
 	}
 
 	@PostMapping("/bank-accounts")
-	public ResponseEntity<BankAccount> createBankAccount(@RequestBody BankAccount bankAccount) {
-		return new ResponseEntity<>(bankAccountService.createBankAccount(bankAccount), HttpStatus.CREATED);
+	public ResponseEntity<BankAccount> createBankAccount() {
+		return new ResponseEntity<>(bankAccountService.createBankAccount(), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/bank-accounts")

@@ -14,23 +14,34 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "transaction")
-public class Transaction {
+@Table(name = "creditcard_transaction")
+public class CreditcardTransaction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long UUID;
 	private LocalDateTime date;
 	private String text;
 	private String type;
-	private String receiptNumber;
 	private double amount;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "bank_account_id", referencedColumnName = "UUID")
+	@JoinColumn(name = "creditcard_id", referencedColumnName = "UUID")
 	@JsonIgnore
-	private BankAccount bankAccount;
+	private Creditcard creditcard;
 
-	public Transaction() {
+	public CreditcardTransaction() {
 	}
+	
+	
+
+	/**
+	 * @param uUID
+	 */
+	public CreditcardTransaction(Long uUID) {
+		super();
+		UUID = uUID;
+	}
+
+
 
 	/**
 	 * @return the uUID
@@ -46,58 +57,74 @@ public class Transaction {
 		UUID = uUID;
 	}
 
+	/**
+	 * @return the date
+	 */
 	public LocalDateTime getDate() {
 		return date;
 	}
 
+	/**
+	 * @param date the date to set
+	 */
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
+	/**
+	 * @return the text
+	 */
 	public String getText() {
 		return text;
 	}
 
+	/**
+	 * @param text the text to set
+	 */
 	public void setText(String text) {
 		this.text = text;
 	}
 
+	/**
+	 * @return the type
+	 */
 	public String getType() {
 		return type;
 	}
 
+	/**
+	 * @param type the type to set
+	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	public String getReceiptNumber() {
-		return receiptNumber;
-	}
-
-	public void setReceiptNumber(String receiptNumber) {
-		this.receiptNumber = receiptNumber;
-	}
-
+	/**
+	 * @return the amount
+	 */
 	public double getAmount() {
 		return amount;
 	}
 
+	/**
+	 * @param amount the amount to set
+	 */
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
 	/**
-	 * @return the bankAccount
+	 * @return the creditCard
 	 */
-	public BankAccount getBankAccount() {
-		return bankAccount;
+	public Creditcard getCreditCard() {
+		return creditcard;
 	}
 
 	/**
-	 * @param bankAccount the bankAccount to set
+	 * @param creditcard the creditCard to set
 	 */
-	public void setBankAccount(BankAccount bankAccount) {
-		this.bankAccount = bankAccount;
+	public void setCreditCard(Creditcard creditcard) {
+		this.creditcard = creditcard;
 	}
 
 }

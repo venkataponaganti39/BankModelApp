@@ -15,34 +15,43 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "bank_account")
-public class BankAccount {
+@Table(name = "creditcard")
+public class Creditcard {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long UUID;
-	private UUID identifier;
+	private String creditCardNumber;
 	private UUID userIdentifier;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "bankAccount", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "creditcard", cascade = CascadeType.ALL)
 	@JsonIgnore
-	private List<Transaction> transactions;
+	private List<CreditcardTransaction> transactions;
 
-	public BankAccount() {
+	public Creditcard() {
 	}
+	
+	
 
-	public BankAccount(Long uUID) {
+	/**
+	 * @param uUID
+	 */
+	public Creditcard(Long uUID) {
 		super();
 		UUID = uUID;
 	}
-	
+
+
+
 	/**
-	 * @param identifier
+	 * @param creditCardNumber
 	 * @param userIdentifier
 	 */
-	public BankAccount(java.util.UUID identifier, java.util.UUID userIdentifier) {
+	public Creditcard(String creditCardNumber, java.util.UUID userIdentifier) {
 		super();
-		this.identifier = identifier;
+		this.creditCardNumber = creditCardNumber;
 		this.userIdentifier = userIdentifier;
 	}
+
+
 
 	/**
 	 * @return the uUID
@@ -59,18 +68,20 @@ public class BankAccount {
 	}
 
 	/**
-	 * @return the identifier
+	 * @return the creditCardNumber
 	 */
-	public UUID getIdentifier() {
-		return identifier;
+	public String getCreditCardNumber() {
+		return creditCardNumber;
 	}
 
 	/**
-	 * @param identifier the identifier to set
+	 * @param creditCardNumber the creditCardNumber to set
 	 */
-	public void setIdentifier(UUID identifier) {
-		this.identifier = identifier;
+	public void setCreditCardNumber(String creditCardNumber) {
+		this.creditCardNumber = creditCardNumber;
 	}
+
+	
 
 	/**
 	 * @return the userIdentifier
@@ -89,15 +100,17 @@ public class BankAccount {
 	/**
 	 * @return the transactions
 	 */
-	public List<Transaction> getTransactions() {
+	public List<CreditcardTransaction> getTransactions() {
 		return transactions;
 	}
 
 	/**
 	 * @param transactions the transactions to set
 	 */
-	public void setTransactions(List<Transaction> transactions) {
+	public void setTransactions(List<CreditcardTransaction> transactions) {
 		this.transactions = transactions;
 	}
+
+	
 
 }

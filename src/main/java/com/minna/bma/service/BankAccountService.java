@@ -1,6 +1,7 @@
 package com.minna.bma.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,8 @@ public class BankAccountService {
 		return transactionRepository.save(transaction);
 	}
 
-	public BankAccount createBankAccount(BankAccount bankAccount) {
+	public BankAccount createBankAccount() {
+		BankAccount bankAccount = new BankAccount(UUID.randomUUID(), UUID.randomUUID());
 		return bankAccountRepository.save(bankAccount);
 	}
 

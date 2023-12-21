@@ -11,8 +11,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
 	List<Transaction> findByBankAccountUUID(Long bankAccountId);
 
-	List<Transaction> findByIdentifier(String identifier);
-
 	Optional<Transaction> findByUUID(Long UUID);
 
 }

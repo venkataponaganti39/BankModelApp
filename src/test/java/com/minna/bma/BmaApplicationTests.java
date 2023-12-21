@@ -2,6 +2,8 @@ package com.minna.bma;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,8 @@ public class BmaApplicationTests {
 	@Test
 	public void testCreateBankAccount() {
 		BankAccount account = new BankAccount();
-		account.setIdentifier("identifier");
-		account.setUserIdentifier("userIdentifier");
+		account.setIdentifier(UUID.randomUUID());
+		account.setUserIdentifier(UUID.randomUUID());
 
 		HttpEntity<BankAccount> request = new HttpEntity<>(account, headers);
 		ResponseEntity<BankAccount> response = restTemplate.exchange(createURLWithPort("/api/bank-accounts"),
@@ -69,8 +71,8 @@ public class BmaApplicationTests {
 	@Test
 	public void testUpdateBankAccount() throws Exception {
 		BankAccount account = new BankAccount();
-		account.setIdentifier("identifier1");
-		account.setUserIdentifier("userIdentifier1");
+		account.setIdentifier(UUID.randomUUID());
+		account.setUserIdentifier(UUID.randomUUID());
 
 		HttpEntity<BankAccount> request = new HttpEntity<>(account, headers);
 		ResponseEntity<BankAccount> response = restTemplate.exchange(createURLWithPort("/api/bank-accounts"),
