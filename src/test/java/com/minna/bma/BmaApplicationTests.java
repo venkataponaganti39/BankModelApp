@@ -66,6 +66,32 @@ public class BmaApplicationTests {
 		mockMvc.perform(MockMvcRequestBuilders.get(createURLWithPort("/api/bank-accounts"))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 	}
+	
+	@Test
+	public void testCalculateBalance() throws Exception {
+		BankAccount account = new BankAccount();
+		account.setIdentifier(UUID.randomUUID());
+		account.setUserIdentifier(UUID.randomUUID());
+
+		HttpEntity<BankAccount> request = new HttpEntity<>(account, headers);
+		ResponseEntity<BankAccount> response = restTemplate.exchange(createURLWithPort("/api/bank-accounts"),
+				HttpMethod.POST, request, BankAccount.class);
+		mockMvc.perform(MockMvcRequestBuilders.get(createURLWithPort("/balance/{UUID}"),response.getBody().getUUID())
+				.contentType(MediaType.APPLICATION_JSON));
+	}
+	
+	@Test
+	public void testGetTimeIntervalBetweenTransactions() throws Exception {
+		BankAccount account = new BankAccount();
+		account.setIdentifier(UUID.randomUUID());
+		account.setUserIdentifier(UUID.randomUUID());
+
+		HttpEntity<BankAccount> request = new HttpEntity<>(account, headers);
+		ResponseEntity<BankAccount> response = restTemplate.exchange(createURLWithPort("/api/bank-accounts"),
+				HttpMethod.POST, request, BankAccount.class);
+		mockMvc.perform(MockMvcRequestBuilders.get(createURLWithPort("/interval/{UUID}/Gym"),response.getBody().getUUID())
+				.contentType(MediaType.APPLICATION_JSON));
+	}
 
 	@Test
 	public void testCreateBankAccount() {
