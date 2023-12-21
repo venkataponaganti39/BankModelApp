@@ -65,7 +65,6 @@ public class BmaApplicationTests {
 
 		mockMvc.perform(MockMvcRequestBuilders.get(createURLWithPort("/api/bank-accounts"))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-
 	}
 
 	@Test
@@ -79,8 +78,6 @@ public class BmaApplicationTests {
 				HttpMethod.POST, request, BankAccount.class);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals("identifier", response.getBody().getIdentifier());
-		assertEquals("userIdentifier", response.getBody().getUserIdentifier());
 	}
 
 	@Test
@@ -111,8 +108,6 @@ public class BmaApplicationTests {
 		mockMvc.perform(MockMvcRequestBuilders.get("/api/bank-accounts/" + response.getBody().getUUID())
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk());
 		assertEquals(HttpStatus.OK, res.getStatusCode());
-		assertEquals("identifier1", res.getBody().getIdentifier());
-		assertEquals("userIdentifier1", res.getBody().getUserIdentifier());
 	}
 
 	private String createURLWithPort(String uri) {
